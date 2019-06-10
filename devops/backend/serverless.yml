@@ -1,0 +1,27 @@
+
+service: rest-api # NOTE: update this with your service name
+
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+
+custom:
+  packageExternal:
+    external:
+      - '../../api'
+
+functions:
+  app:
+    handler: handler.handler
+    # The `events` block defines how to trigger the http events
+    events:
+        - http: ANY /
+        - http: 'ANY {proxy+}'
+
+
+
+plugins:
+  # - serverless-offline
+  - serverless-package-external
