@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- node
+cache:
+  directories:
+    - api/node_modules
+    - app/node_modules
+script: 
+    - npm install -g serverless
+    - sls deploy
+    
