@@ -34,7 +34,7 @@ jobs:
                 serverless syncToS3
                 cd ../backend
                 npm install serverless-package-external 
-                npm install serverless-http
+                npm install serverless-http --save
                 serverless deploy
       
       branches:
