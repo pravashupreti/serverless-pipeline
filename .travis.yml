@@ -26,6 +26,7 @@ jobs:
       script: |
                 pwd
                 cd devops/frontend
+                npm install
                 serverless deploy
                 cd ../backend
                 serverless deploy
