@@ -32,7 +32,7 @@ jobs:
                 npm install
                 serverless deploy
                 cd ../backend
-                npm install serverless-package-external
+                npm install serverless-package-external serverless-http
                 serverless deploy
       
       branches:
