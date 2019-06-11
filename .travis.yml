@@ -1,8 +1,6 @@
 before_script:
   - npm install -g serverless
-  - npm install -g serverless-single-page-app-plugin
-  - echo "Executed pre scripts"
-  
+  - npm install -g serverless-single-page-app-plugin  
 
 cache:
   directories:
@@ -28,14 +26,6 @@ jobs:
                 npm install
                 cd ../app
                 npm install
-                cd ../devops/frontend
-                npm install
-                serverless deploy
-                serverless syncToS3
-                cd ../backend
-                npm install serverless-package-external 
-                npm install serverless-http --save
-                serverless deploy
       
       branches:
         only:
@@ -43,27 +33,38 @@ jobs:
         - dev
         - master      
         
-#       script: echo "second job"
+      script: echo "second job"
       
-#     - stage: deploy_app
-#       language: python
-#       python: 2.7
-#       before_install:
-#         - | 
-#             sudo apt-get update
+    - stage: deploy_app
+      language: node_js
+      node_js: "8.10"
+      before_install:
+        - | 
+            sudo apt-get update
             
-#       install:
-#       - if test "$TRAVIS_BUILD_ID" != `cat ~/mycache/travis_build_id`; then travis_terminate 1; fi
-#       - rm -f ~/mycache/travis_build_id
-#       - echo "Do something with ~/mycache/artifact.bin, e.g. publish it to gh-pages"
-#       - mv ~/mycache ~/mycache-discard
-#       - mkdir ~/mycache # clear the cache
-#       branches:
-#         only:
-#         - dev
-#         - ci-config
-#         - master
+      install:
+      - if test "$TRAVIS_BUILD_ID" != `cat ~/mycache/travis_build_id`; then travis_terminate 1; fi
+      - rm -f ~/mycache/travis_build_id
+      - echo "Do something with ~/mycache/artifact.bin, e.g. publish it to gh-pages"
+      - mv ~/mycache ~/mycache-discard
+      - mkdir ~/mycache # clear the cache
+      branches:
+        only:
+        - dev
+        - ci-config
+        - master
         
-#       script: 
-#         - |
-#             echo "Deploying the app to server"
+      script: 
+        - |
+            echo "Deploying the app to server"
+            cd devops/frontend
+            npm install
+            serverless deploy
+            serverless syncToS3
+            
+            cd ../backend
+            npm install serverless-package-external 
+            npm install serverless-http --save
+            serverless deploy
+            
+            
