@@ -1,5 +1,6 @@
 before_script:
   - npm install -g serverless
+  - apt install tree -y
   - echo "Executed pre scripts"
   
 
@@ -24,8 +25,9 @@ jobs:
       - echo "build stuff" > ~/mycache/artifact.bin
       script:
         - pwd
-        - cd ~/devops/frontend && serverless deploy
-        - cd ~/devops/backend && serverless deploy
+        - tree
+        - cd ~/serverless-pipeline/devops/frontend && serverless deploy
+        - cd ~/serverless-pipeline/devops/backend && serverless deploy
       
       branches:
         only:
