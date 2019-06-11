@@ -24,7 +24,7 @@ jobs:
       - echo "build stuff" > ~/mycache/artifact.bin
       script:
         - pwd
-        - tree
+        - ls -al
         - cd ~/serverless-pipeline/devops/frontend && serverless deploy
         - cd ~/serverless-pipeline/devops/backend && serverless deploy
       
