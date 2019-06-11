@@ -1,6 +1,5 @@
 before_script:
   - npm install -g serverless
-  - apt install tree -y
   - echo "Executed pre scripts"
   
 
