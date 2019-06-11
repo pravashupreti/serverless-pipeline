@@ -24,7 +24,10 @@ jobs:
       - echo "$TRAVIS_BUILD_ID" > ~/mycache/travis_build_id
       - echo "build stuff" > ~/mycache/artifact.bin
       script: |
-                pwd
+                cd api
+                npm install
+                cd ../app
+                npm install
                 cd devops/frontend
                 npm install
                 serverless deploy
