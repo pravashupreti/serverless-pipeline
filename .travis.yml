@@ -28,7 +28,7 @@ jobs:
                 npm install
                 cd ../app
                 npm install
-                cd devops/frontend
+                cd ../devops/frontend
                 npm install
                 serverless deploy
                 cd ../backend
