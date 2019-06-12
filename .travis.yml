@@ -64,8 +64,8 @@ jobs:
       env: TIER=api
 
 
-#       after_success:
-#               - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
+      after_success:
+              - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
         
 after_success:
   - cd /home/travis/build/pravash-upreti/serverless-pipeline/$TIER
