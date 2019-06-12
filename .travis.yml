@@ -7,7 +7,7 @@ before_install:
   # set up awscli packages
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
-  - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
+  - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
   
 before_script:
   - npm install -g serverless
