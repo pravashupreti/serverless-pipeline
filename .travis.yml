@@ -69,8 +69,8 @@ jobs:
             npm install serverless-http --save
             serverless deploy
             
-      after_success:
-              - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
+#       after_success:
+#               - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
         
 after_success:
   - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
