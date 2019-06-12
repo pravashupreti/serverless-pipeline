@@ -11,8 +11,8 @@ before_script:
   # set up awscli packages
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
-  - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
-  - unzip -q ~/$TRAVIS_BUILD_NUMBER/artifacts.zip -d ./ || true
+  - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER ~/$TRAVIS_BUILD_NUMBER/$TIER
+  - unzip -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip -d ./ || true
   - ls -al
 # before_script:
   - npm install -g serverless
@@ -70,5 +70,5 @@ jobs:
 #               - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
         
 after_success:
-  - zip -r -q ~/$TRAVIS_BUILD_NUMBER/artifacts.zip ~/*
-  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
+  - zip -r -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip ~/$TIER/*
+  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER/$TIER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER
