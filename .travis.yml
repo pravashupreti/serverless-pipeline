@@ -1,3 +1,6 @@
+# linux distribution to be used in VM
+dist: xenial
+
 env:
   global:
     # include $HOME/.local/bin for `aws`
@@ -20,7 +23,7 @@ cache:
     
 jobs:
   include:
-    - stage: build_api
+    - stage: build
       language: node_js
       node_js: "8.10"
       cache:
@@ -28,12 +31,11 @@ jobs:
           - "node_modules"
         yarn: true
       script: |
-                echo one | tee > ~/$TRAVIS_BUILD_NUMBER/one
-                echo "Manual created file " > ~/$TRAVIS_BUILD_NUMBER/custom-file.txt
-                cat ~/$TRAVIS_BUILD_NUMBER/one
                 cd api
                 npm install
-                cd ../app
+                
+      script: |
+                cd app
                 npm install
       
       branches:
@@ -42,7 +44,7 @@ jobs:
         - dev
         - master      
       
-    - stage: deploy_app
+    - stage: deploy
       language: node_js
       node_js: "8.10"
       before_install:
@@ -55,25 +57,24 @@ jobs:
         - ci-config
         - master
         
-      script: 
-        - |
-            cat ~/$TRAVIS_BUILD_NUMBER/*
-            echo "Deploying the app to server"
-            cd devops/frontend
-            npm install
-            serverless deploy
-            serverless syncToS3
-            
-            cd ../backend
-            npm install serverless-package-external 
-            npm install serverless-http --save
-            serverless deploy
-            
+      script: |
+                echo "Deploying frontend"
+                cd devops/frontend
+                npm install
+                serverless deploy
+                serverless syncToS3
+
+      script: |
+                echo "Deploying the backend"
+                cd devops/backend
+                npm install serverless-package-external 
+                npm install serverless-http --save
+                serverless deploy
+
+
 #       after_success:
 #               - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
         
 after_success:
   - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
   
-        
-            
