@@ -29,6 +29,8 @@ jobs:
         yarn: true
       script: |
                 echo one | tee > ~/$TRAVIS_BUILD_NUMBER/one
+                echo "Manual created file " > ~/$TRAVIS_BUILD_NUMBER/custom-file.txt
+                cat ~/$TRAVIS_BUILD_NUMBER/one
                 cd api
                 npm install
                 cd ../app
