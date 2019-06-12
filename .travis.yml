@@ -61,7 +61,7 @@ jobs:
         - ci-config
         - master
       
-      name: "Deploy app"  
+      name: "Deploy APP"  
       script: |
                 echo "Deploying frontend"
                 cd devops/frontend
@@ -69,7 +69,7 @@ jobs:
                 serverless deploy
                 serverless syncToS3
       
-      name: "Deploy api"  
+      name: "Deploy API"  
       script: |
                 echo "Deploying the backend"
                 cd devops/backend
@@ -84,3 +84,7 @@ jobs:
 after_success:
   - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
   
+matrix:
+  include:  
+    - node_js: 8.10
+    - node_js: 8.10
