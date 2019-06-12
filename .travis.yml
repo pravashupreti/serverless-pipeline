@@ -1,3 +1,4 @@
+
 # linux distribution to be used in VM
 dist: xenial
 
@@ -12,6 +13,7 @@ before_script:
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER ~/$TRAVIS_BUILD_NUMBER/$TIER
   - unzip -qo ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip -d ./$TIER/ || true
+
   - npm install -g serverless
   - npm install -g serverless-single-page-app-plugin  
 
@@ -19,7 +21,6 @@ cache:
   directories:
     - ~/api/node_modules
     - ~/app/node_modules
-
 
 jobs:
   include:
@@ -70,3 +71,4 @@ after_success:
   - cd /home/travis/build/pravash-upreti/serverless-pipeline/$TIER
   - zip -r -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip *
   - aws s3 sync ~/$TRAVIS_BUILD_NUMBER/$TIER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER
+
