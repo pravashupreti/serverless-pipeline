@@ -72,7 +72,7 @@ jobs:
                 npm install serverless-package-external 
                 npm install serverless-http --save
                 serverless deploy
-       name: "Deploy API" 
+      name: "Deploy API" 
 
 
 #       after_success:
