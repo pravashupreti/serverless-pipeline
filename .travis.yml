@@ -12,6 +12,8 @@ before_script:
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
+  - unzip -q ~/$TRAVIS_BUILD_NUMBER/artifacts.zip -d ./
+  - ls -al
 # before_script:
   - npm install -g serverless
   - npm install -g serverless-single-page-app-plugin  
@@ -79,4 +81,5 @@ jobs:
 #               - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
         
 after_success:
+  - zip -r -q artifacts/artifacts.zip *
   - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
