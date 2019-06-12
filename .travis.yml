@@ -12,7 +12,7 @@ before_script:
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER ~/$TRAVIS_BUILD_NUMBER/$TIER
-  - unzip -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip -d ./ || true
+  - unzip -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip -d ./$TIER/ || true
   - ls -al
 # before_script:
   - npm install -g serverless
