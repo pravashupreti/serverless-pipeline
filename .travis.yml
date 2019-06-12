@@ -29,36 +29,24 @@ jobs:
     - stage: build
       language: node_js
       node_js: "8.10"
-      name: "Build API"  
       
+      name: "Build API"  
       script: |
                 cd api
                 npm install
+      env: TIER=api
                       
     - script: |
                 cd app
                 npm install
       
-      name: "Build APP"        
-      branches:
-        only:
-        - ci-config
-        - dev
-        - master      
+      name: "Build APP"  
+      env: TIER=app
       
     - stage: deploy
       language: node_js
-      node_js: "8.10"
-      before_install:
-        - | 
-            sudo apt-get update
-            
-      branches:
-        only:
-        - dev
-        - ci-config
-        - master
-      
+      node_js: "8.10"            
+    
       name: "Deploy APP"  
       script: |
                 echo "Deploying frontend"
@@ -66,7 +54,7 @@ jobs:
                 npm install
                 serverless deploy
                 serverless syncToS3
-      
+      env: TIER=app
       
     - script: |
                 echo "Deploying the backend"
@@ -75,6 +63,7 @@ jobs:
                 npm install serverless-http --save
                 serverless deploy
       name: "Deploy API" 
+      env: TIER=api
 
 
 #       after_success:
