@@ -41,8 +41,6 @@ jobs:
         - ci-config
         - dev
         - master      
-        
-      script: echo "second job"
       
     - stage: deploy_app
       language: node_js
