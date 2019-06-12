@@ -83,8 +83,11 @@ jobs:
         
 after_success:
   - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
-  
-matrix:
-  include:  
-    - node_js: 8.10
-    - node_js: 8.10
+
+env:
+  global:
+    - MY_GLOBAL_VAR=123
+    - CI_NODE_TOTAL=2
+  matrix:
+    - CI_NODE_INDEX=0
+    - CI_NODE_INDEX=1
