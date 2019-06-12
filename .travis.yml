@@ -70,5 +70,6 @@ jobs:
 #               - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
         
 after_success:
-  - zip -r -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip /home/travis/build/pravash-upreti/serverless-pipeline/$TIER/*
+  - cd /home/travis/build/pravash-upreti/serverless-pipeline/$TIER
+  - zip -r -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip *
   - aws s3 sync ~/$TRAVIS_BUILD_NUMBER/$TIER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER
