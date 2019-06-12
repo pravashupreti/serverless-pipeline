@@ -5,16 +5,13 @@ env:
   global:
     # include $HOME/.local/bin for `aws`
     - PATH=$HOME/.local/bin:$PATH
-
-# before_install:
+    
 before_script:
   # set up awscli packages
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER ~/$TRAVIS_BUILD_NUMBER/$TIER
-  - unzip -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip -d ./$TIER/ || true
-  - ls -al
-# before_script:
+  - unzip -qo ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip -d ./$TIER/ || true
   - npm install -g serverless
   - npm install -g serverless-single-page-app-plugin  
 
