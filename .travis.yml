@@ -32,12 +32,12 @@ matrix:
       script: |
                 cd api
                 npm install
-      
-      name: "Build APP"                  
-      script: |
+                      
+    - script: |
                 cd app
                 npm install
       
+      name: "Build APP"        
       branches:
         only:
         - ci-config
@@ -65,13 +65,14 @@ matrix:
                 serverless deploy
                 serverless syncToS3
       
-      name: "Deploy API"  
-      script: |
+      
+    - script: |
                 echo "Deploying the backend"
                 cd devops/backend
                 npm install serverless-package-external 
                 npm install serverless-http --save
                 serverless deploy
+       name: "Deploy API" 
 
 
 #       after_success:
