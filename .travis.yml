@@ -27,11 +27,6 @@ jobs:
         directories:
           - "node_modules"
         yarn: true
-      install:
-      - mkdir ~/mycache
-      - echo "$TRAVIS_BUILD_ID"
-      - echo "$TRAVIS_BUILD_ID" > ~/mycache/travis_build_id
-      - echo "build stuff" > ~/mycache/artifact.bin
       script: |
                 echo one | tee > ~/$TRAVIS_BUILD_NUMBER/one
                 cd api
@@ -54,12 +49,6 @@ jobs:
         - | 
             sudo apt-get update
             
-      install:
-      - if test "$TRAVIS_BUILD_ID" != `cat ~/mycache/travis_build_id`; then travis_terminate 1; fi
-      - rm -f ~/mycache/travis_build_id
-      - echo "Do something with ~/mycache/artifact.bin, e.g. publish it to gh-pages"
-      - mv ~/mycache ~/mycache-discard
-      - mkdir ~/mycache # clear the cache
       branches:
         only:
         - dev
