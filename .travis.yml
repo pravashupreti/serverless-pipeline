@@ -1,3 +1,14 @@
+env:
+  global:
+    # include $HOME/.local/bin for `aws`
+    - PATH=$HOME/.local/bin:$PATH
+
+before_install:
+  # set up awscli packages
+  - pip install --user awscli
+  - mkdir -p ~/$TRAVIS_BUILD_NUMBER
+  - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
+  
 before_script:
   - npm install -g serverless
   - npm install -g serverless-single-page-app-plugin  
@@ -22,6 +33,7 @@ jobs:
       - echo "$TRAVIS_BUILD_ID" > ~/mycache/travis_build_id
       - echo "build stuff" > ~/mycache/artifact.bin
       script: |
+                echo one | tee > ~/$TRAVIS_BUILD_NUMBER/one
                 cd api
                 npm install
                 cd ../app
@@ -56,6 +68,7 @@ jobs:
         
       script: 
         - |
+            cat ~/$TRAVIS_BUILD_NUMBER/*
             echo "Deploying the app to server"
             cd devops/frontend
             npm install
@@ -67,4 +80,11 @@ jobs:
             npm install serverless-http --save
             serverless deploy
             
+      after_success:
+              - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
+        
+after_success:
+  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER
+  
+        
             
