@@ -1,4 +1,19 @@
+
+# linux distribution to be used in VM
+dist: xenial
+
+env:
+  global:
+    # include $HOME/.local/bin for `aws`
+    - PATH=$HOME/.local/bin:$PATH
+    
 before_script:
+  # set up awscli packages
+  - pip install --user awscli
+  - mkdir -p ~/$TRAVIS_BUILD_NUMBER
+  - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER ~/$TRAVIS_BUILD_NUMBER/$TIER
+  - unzip -qo ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip -d ./$TIER/ || true
+
   - npm install -g serverless
   - npm install -g serverless-single-page-app-plugin  
 
@@ -6,65 +21,54 @@ cache:
   directories:
     - ~/api/node_modules
     - ~/app/node_modules
-    
+
 jobs:
   include:
-    - stage: build_api
+    - stage: build
       language: node_js
       node_js: "8.10"
-      cache:
-        directories:
-          - "node_modules"
-        yarn: true
-      install:
-      - mkdir ~/mycache
-      - echo "$TRAVIS_BUILD_ID"
-      - echo "$TRAVIS_BUILD_ID" > ~/mycache/travis_build_id
-      - echo "build stuff" > ~/mycache/artifact.bin
+      
+      name: "Build API"  
       script: |
                 cd api
                 npm install
-                cd ../app
+      env: TIER=api
+                      
+    - script: |
+                cd app
                 npm install
       
-      branches:
-        only:
-        - ci-config
-        - dev
-        - master      
-        
-      script: echo "second job"
+      name: "Build APP"  
+      env: TIER=app
       
-    - stage: deploy_app
+    - stage: deploy
       language: node_js
-      node_js: "8.10"
-      before_install:
-        - | 
-            sudo apt-get update
-            
-      install:
-      - if test "$TRAVIS_BUILD_ID" != `cat ~/mycache/travis_build_id`; then travis_terminate 1; fi
-      - rm -f ~/mycache/travis_build_id
-      - echo "Do something with ~/mycache/artifact.bin, e.g. publish it to gh-pages"
-      - mv ~/mycache ~/mycache-discard
-      - mkdir ~/mycache # clear the cache
-      branches:
-        only:
-        - dev
-        - ci-config
-        - master
+      node_js: "8.10"            
+    
+      name: "Deploy APP"  
+      script: |
+                echo "Deploying frontend"
+                cd devops/frontend
+                npm install
+                serverless deploy
+                serverless syncToS3
+      env: TIER=app
+      
+    - script: |
+                echo "Deploying the backend"
+                cd devops/backend
+                npm install serverless-package-external 
+                npm install serverless-http --save
+                serverless deploy
+      name: "Deploy API" 
+      env: TIER=api
+
+
+#       after_success:
+#               - aws s3 rm --recursive s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER # clean up after ourselves
         
-      script: 
-        - |
-            echo "Deploying the app to server"
-            cd devops/frontend
-            npm install
-            serverless deploy
-            serverless syncToS3
-            
-            cd ../backend
-            npm install serverless-package-external 
-            npm install serverless-http --save
-            serverless deploy
-            
-            
+after_success:
+  - cd /home/travis/build/pravash-upreti/serverless-pipeline/$TIER
+  - zip -r -q ~/$TRAVIS_BUILD_NUMBER/$TIER/$TIER.zip *
+  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER/$TIER s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER/$TIER
+
