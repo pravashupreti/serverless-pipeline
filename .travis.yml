@@ -3,13 +3,13 @@ env:
     # include $HOME/.local/bin for `aws`
     - PATH=$HOME/.local/bin:$PATH
 
-before_install:
+# before_install:
+before_script:
   # set up awscli packages
   - pip install --user awscli
   - mkdir -p ~/$TRAVIS_BUILD_NUMBER
   - aws s3 sync s3://lf-travis-shared-storage/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
-  
-before_script:
+# before_script:
   - npm install -g serverless
   - npm install -g serverless-single-page-app-plugin  
 
