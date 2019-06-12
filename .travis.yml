@@ -30,10 +30,14 @@ jobs:
         directories:
           - "node_modules"
         yarn: true
+      
+      name: "Build API"  
+      
       script: |
                 cd api
                 npm install
-                
+      
+      name: "Build APP"                  
       script: |
                 cd app
                 npm install
@@ -56,14 +60,16 @@ jobs:
         - dev
         - ci-config
         - master
-        
+      
+      name: "Deploy app"  
       script: |
                 echo "Deploying frontend"
                 cd devops/frontend
                 npm install
                 serverless deploy
                 serverless syncToS3
-
+      
+      name: "Deploy api"  
       script: |
                 echo "Deploying the backend"
                 cd devops/backend
