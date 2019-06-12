@@ -22,7 +22,7 @@ cache:
     - ~/app/node_modules
 
 
-matrix:
+jobs:
   include:
     - stage: build
       language: node_js
