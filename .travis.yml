@@ -1,11 +1,6 @@
 # linux distribution to be used in VM
 dist: xenial
 
-matrix:
- include:
-  - language: node_js
- 
-
 env:
   global:
     # include $HOME/.local/bin for `aws`
@@ -27,7 +22,7 @@ cache:
     - ~/app/node_modules
 
 
-jobs:
+matrix:
   include:
     - stage: build
       language: node_js
