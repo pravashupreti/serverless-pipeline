@@ -1,6 +1,11 @@
 # linux distribution to be used in VM
 dist: xenial
 
+matrix:
+ include:
+  - language: node_js
+ 
+
 env:
   global:
     # include $HOME/.local/bin for `aws`
@@ -21,20 +26,12 @@ cache:
     - ~/api/node_modules
     - ~/app/node_modules
 
-matrix:
-  - node_js=8.10
-  - node_js=8.10
 
 jobs:
   include:
     - stage: build
       language: node_js
       node_js: "8.10"
-      cache:
-        directories:
-          - "node_modules"
-        yarn: true
-      
       name: "Build API"  
       
       script: |
