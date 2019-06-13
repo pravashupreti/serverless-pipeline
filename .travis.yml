@@ -32,11 +32,13 @@ jobs:
       script: |
                 cd api
                 npm install
+                npm run build
       env: TIER=api
                       
     - script: |
                 cd app
                 npm install
+                npm run build
       
       name: "Build APP"  
       env: TIER=app
