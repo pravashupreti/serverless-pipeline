@@ -54,6 +54,7 @@ jobs:
                 npm install
                 serverless deploy
                 serverless syncToS3
+                serverless invalidateCloudFrontCache
       env: TIER=app
       
     - script: |

@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serverless-http": "^2.0.2"
+    "serverless-http": "^2.0.2",
+    "serverless-package-external": "^1.1.0"
   }
 }
